@@ -36,7 +36,7 @@ class Auth extends Component {
               .register(
                 this.state.username,
                 this.state.password,
-                `"https://robohash.org/${this.state.username}.png"`
+                `https://robohash.org/${this.state.username}.png`
               )
               .then(response => this.props.history.push("/dashboard"))
           }
