@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { logout, getUser } from "../../ducks/reducer";
 
 function Nav(props) {
+  console.log(props, " nav");
   return (
     <div>
       <h1>{props.user.username}</h1>
@@ -19,9 +21,7 @@ function Nav(props) {
       <Link to="/new">
         <button>New Post</button>
       </Link>
-      <Link to="/">
-        <button>Logout</button>
-      </Link>
+      <button onClick={props.logout}>Logout</button>
     </div>
   );
 }
@@ -33,5 +33,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  {}
+  { logout, getUser }
 )(Nav);

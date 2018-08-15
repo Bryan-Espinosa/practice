@@ -1,10 +1,9 @@
-var userID;
-
 const register = (req, res) => {
   req.app
     .get("db")
     .register(req.body.username, req.body.password, req.body.profile_pic)
     .then(results => {
+      console.log(req.session);
       req.session.user = results[0].id;
       res.status(200).json(results);
     })
@@ -16,7 +15,8 @@ const login = (req, res) => {
     .get("db")
     .login(req.body.username, req.body.password)
     .then(results => {
-      userID = results[0].id;
+      console.log(req.session);
+      req.session.user = results[0].id;
       res.status(200).json(results[0]);
     })
     .catch(err => console.log(err));
@@ -40,9 +40,26 @@ const createPost = (req, res) => {
     .catch(err => console.log(err));
 };
 
+const logout = (req, res) => {
+  console.log("logout fired");
+  req.session.destroy(() => {
+    console.log(req.session);
+    res.redirect("/");
+  });
+};
+
+const getUser = (req, res) => {
+  req.app
+    .get("db")
+    .getUser(req.session.user)
+    .then(results => res.status(200).json(results))
+    .catch(err => console.log(err));
+};
 module.exports = {
   register,
   login,
   getPosts,
-  createPost
+  createPost,
+  logout,
+  getUser
 };

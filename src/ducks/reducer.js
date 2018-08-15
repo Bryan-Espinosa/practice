@@ -2,13 +2,29 @@ import axios from "axios";
 
 const initalState = {
   user: {},
-  posts: []
+  posts: [],
+  userID: ""
 };
 
 const REGISTER = "REGISTER";
 const LOGIN = "LOGIN";
 const GETPOSTS = "GETPOSTS";
 const CREATEPOST = "CREATEPOST";
+const LOGOUT = "LOGOUT";
+const GET_USER = "GETUSER";
+
+export function getUser(id) {
+  return {
+    type: GET_USER,
+    payload: axios
+      .post("/api/getuser", { id })
+      .then(results => {
+        console.log(results);
+        results.data;
+      })
+      .catch(err => console.log(err))
+  };
+}
 
 export function register(username, password, profile_pic) {
   return {
@@ -53,6 +69,13 @@ export function createPost(title, img, content) {
   };
 }
 
+export function logout() {
+  return {
+    type: LOGOUT,
+    payload: axios.post("/api/logout").catch(err => console.log(err))
+  };
+}
+
 export default function reducer(state = initalState, action) {
   switch (action.type) {
     case `${REGISTER}_FULFILLED`:
@@ -62,6 +85,8 @@ export default function reducer(state = initalState, action) {
       return { ...state, posts: action.payload };
     case `${CREATEPOST}_FULFILLED`:
       return { ...state };
+    case `${GET_USER}_FULFILLED`:
+      return { ...state, userID: action.payload };
     default:
       return state;
   }
